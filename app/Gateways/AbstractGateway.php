@@ -1,0 +1,318 @@
+<?php
+
+declare(strict_types=1);
+
+namespace BeycanPress\CryptoPay\CF7\Gateways;
+
+use BeycanPress\CryptoPay\Constants;
+use BeycanPress\CryptoPay\Integrator\Session;
+use BeycanPress\CryptoPayLite\Constants as LiteConstants;
+
+abstract class AbstractGateway
+{
+    /**
+     * @var string
+     */
+    public string $key;
+
+    /**
+     * @var string
+     */
+    public string $name;
+
+    /**
+     * AbstractGateway constructor.
+     */
+    public function __construct()
+    {
+        add_action('wpcf7_init', [$this, 'init']);
+        add_action('wpcf7_after_save', [$this, 'save']);
+        add_filter('wpcf7_editor_panels', [$this, 'addPanel']);
+        add_filter('wpcf7_posted_data', [$this, 'addSessionForPayment']);
+        add_action('wpcf7_before_send_mail', [$this, 'checkPayment'], 10, 3);
+    }
+
+    /**
+     * @return object
+     */
+    abstract public function getModel(): object;
+
+    /**
+     * @return string
+     */
+    abstract public function getMainJsKey(): string;
+
+    /**
+     * @return object
+     */
+    abstract public function getPayment(): object;
+
+    /**
+     * @param array<string,mixed> $args
+     * @return object
+     */
+    abstract public function createOrder(array $args): object;
+
+    /**
+     * @param array<string,mixed> $args
+     * @return object
+     */
+    abstract public function createParams(array $args): object;
+
+    /**
+     * @return void
+     */
+    public function init(): void
+    {
+        wpcf7_add_form_tag($this->key, [$this, 'tagHandler']);
+    }
+
+    /**
+     * @param \WPCF7_FormTag $tag
+     * @return string
+     */
+    public function tagHandler(\WPCF7_FormTag $tag): string
+    {
+        $form = \WPCF7_ContactForm::get_current();
+        $itemId = get_post_meta($form->id(), "cf7_cp_item_id", true);
+        $activate = get_post_meta($form->id(), "cf7_cp_activate", true);
+        $itemPrice = get_post_meta($form->id(), "cf7_cp_item_price", true);
+        $itemCurrency = get_post_meta($form->id(), "cf7_cp_item_currency", true);
+
+        if (!$activate) {
+            return sprintf(esc_html__('%s is not activated.', 'cf7-cryptopay'), $this->name);
+        }
+
+        if (!$itemPrice || !$itemCurrency) {
+            return esc_html__('Item price or currency is not set.', 'cf7-cryptopay');
+        }
+
+        $order = [
+            'amount' => $itemPrice,
+            'currency' => $itemCurrency,
+        ];
+
+        $params = [
+            'formId' => strval($form->id()),
+        ];
+
+        if ($itemId) {
+            $params['itemId'] = strval($itemId);
+        }
+
+        if (Session::has('cf7_transaction_hash')) {
+            $transaction = $this->getModel()->findOneBy([
+                'hash' => Session::get('cf7_transaction_hash'),
+                'params' => json_encode($params),
+            ]);
+            if ($transaction) {
+                return $this->alreadyPaid($transaction);
+            }
+        }
+
+        $html = $this->getPayment()
+        ->setOrder($this->createOrder($order))
+        ->setParams($this->createParams($params))
+        ->html(loading:true);
+
+        $this->enqueueScripts([
+            $this->getMainJsKey()
+        ]);
+
+        return $html;
+    }
+
+    /**
+     * @param array<string> $deps
+     * @return void
+     */
+    protected function enqueueScripts(array $deps = []): void
+    {
+        wp_enqueue_script(
+            'cf7-' . $this->key,
+            CF7_CRYPTOPAY_URL . 'assets/js/main.js',
+            array_merge($deps, ['jquery', 'wp-i18n']),
+            CF7_CRYPTOPAY_VERSION,
+            true
+        );
+    }
+
+    /**
+     * @param object $transaction
+     * @return string
+     */
+    private function alreadyPaid(object $transaction): string
+    {
+        $this->enqueueScripts();
+        $msg = esc_html__('The final payment for this form has been completed but not submitted. Therefore, you only need to send the form.', 'cf7-cryptopay'); // phpcs:ignore
+        return '<p>' . $msg . '</p><p><input type="hidden" name="transaction-hash" value="' . esc_attr($transaction->getHash()) . '" /><input class="wpcf7-form-control wpcf7-submit has-spinner" type="submit" value="' . esc_attr__('Send') . '"><p>'; // phpcs:ignore
+    }
+
+        /**
+     * @param \WPCF7_ContactForm $form
+     * @return void
+     */
+    public function save(\WPCF7_ContactForm $form): void
+    {
+        $activate = isset($_POST['cf7_cp_activate']) ? 1 : 0;
+        $itemId = isset($_POST['cf7_cp_item_id']) ? absint($_POST['cf7_cp_item_id']) : 0;
+        $itemPrice = isset($_POST['cf7_cp_item_price']) ? absint($_POST['cf7_cp_item_price']) : 0;
+        $itemCurrency = isset($_POST['cf7_cp_item_currency'])
+        ? sanitize_text_field($_POST['cf7_cp_item_currency'])
+        : 'USD';
+
+        update_post_meta($form->id(), "cf7_cp_activate", $activate);
+        update_post_meta($form->id(), "cf7_cp_item_id", $itemId);
+        update_post_meta($form->id(), "cf7_cp_item_price", $itemPrice);
+        update_post_meta($form->id(), "cf7_cp_item_currency", $itemCurrency);
+    }
+
+    /**
+     * @param array<string,mixed> $panels
+     * @return array<string,mixed>
+     */
+    public function addPanel(array $panels): array
+    {
+        $panels[$this->key] = [
+            'title' => $this->name,
+            'callback' => [$this, 'panelContent'],
+        ];
+
+        return $panels;
+    }
+
+    /**
+     * @return void
+     */
+    public function panelContent(): void
+    {
+        if (class_exists(Constants::class)) {
+            $currencies = Constants::getCountryCurrencies();
+        } else {
+            $currencies = LiteConstants::getCountryCurrencies();
+        }
+
+        $formId = isset($_GET['post']) ? absint($_GET['post']) : 0;
+        $itemId = get_post_meta($formId, "cf7_cp_item_id", true);
+        $activate = get_post_meta($formId, "cf7_cp_activate", true);
+        $itemPrice = get_post_meta($formId, "cf7_cp_item_price", true);
+        $itemCurrency = get_post_meta($formId, "cf7_cp_item_currency", true);
+        $activationStatus = $activate ? 'checked' : '';
+
+        $options = '';
+        foreach ($currencies as $code => $name) {
+            $selectedCurrency = $itemCurrency == $code ? 'selected' : '';
+            $options .= '<option value="' . $code . '" ' . esc_attr($selectedCurrency) . '>' . $name . '</option>';
+        }
+
+        echo '<h2>' . $this->name . '</h2>';
+        echo '<p>' . esc_html__('Add cryptocurrency payment gateway to your form.', 'cf7-cryptopay') . '</p>';
+        echo '<p>' . sprintf(
+            esc_html__(
+                'You need add "%s" tag to form for start %s and need delete submit button.',
+                'cf7-cryptopay'
+            ),
+            '<strong>[' . $this->key . ']</strong>',
+            '<strong>[' . $this->name . ']</strong>'
+        ) . '</p>';
+        echo '
+            <table>
+                <tr>
+                    <td width="195px">
+                        <label>' . sprintf(esc_html__('Activate %s', 'cf7-cryptopay'), $this->name) . ': </label>
+                    </td>
+                    <td width="250px">
+                        <input name="cf7_cp_activate" value="1" type="checkbox" ' . esc_attr($activationStatus) . '>
+                    </td>
+                </tr>
+                <tr><td>&nbsp;</td></tr>
+                <tr>
+                    <td>Item ID: </td>
+                    <td>
+                        <input type="number" min="1" name="cf7_cp_item_id" value="' . esc_attr($itemId) . '">
+                    </td>
+                    <td> [ Optional ]</td>
+                </tr>
+                <tr><td>&nbsp;</td></tr>
+                <tr>
+                    <td>Item Price: </td>
+                    <td>
+                        <input
+                            type="number"
+                            min="0"
+                            name="cf7_cp_item_price"
+                            value="' . esc_attr($itemPrice) . '"
+                            required
+                        >
+                    </td>
+                    <td> [ Required ]</td>
+                </tr>
+                <tr><td>&nbsp;</td></tr>
+                <tr>
+                    <td>Item Currency: </td>
+                    <td>
+                        <select name="cf7_cp_item_currency" required>
+                            <option value="">Select Currency</option>
+                            ' . $options . '
+                        </select>
+                    </td>
+                    <td> [ Required ]</td>
+                </tr>
+            </table>
+        ';
+    }
+
+    /**
+     * @param array<string,mixed> $postedData
+     * @return array<string,mixed>
+     */
+    public function addSessionForPayment(array $postedData): array
+    {
+        $transactionHash = isset($postedData['transaction-hash'])
+        ? sanitize_text_field($postedData['transaction-hash'])
+        : null;
+
+        if ($transactionHash) {
+            Session::set('cf7_transaction_hash', $transactionHash);
+        }
+
+        return $postedData;
+    }
+
+    /**
+     * @param \WPCF7_ContactForm $form
+     * @param bool $abort
+     * @param \WPCF7_Submission $submission
+     * @return void
+     */
+    public function checkPayment(\WPCF7_ContactForm $form, bool &$abort, \WPCF7_Submission $submission): void
+    {
+        $abort = true;
+        $activate = get_post_meta($form->id(), "cf7_cp_activate", true);
+
+        if (!$activate) {
+            return;
+        }
+
+        $postedData = $submission->get_posted_data();
+        $transactionHash = isset($postedData['transaction-hash'])
+        ? sanitize_text_field($postedData['transaction-hash'])
+        : null;
+
+        if ($transactionHash) {
+            $transaction = $this->getModel()->findOneBy([
+                'hash' => $transactionHash,
+            ]);
+            if ($transaction) {
+                $abort = false;
+                Session::remove('cf7_transaction_hash');
+            }
+        }
+
+        if ($abort) {
+            $submission->set_response($form->filter_message(
+                esc_html__('Payment is not verified. Sending mail has been aborted.', 'cf7-cryptopay')
+            ));
+        }
+    }
+}
