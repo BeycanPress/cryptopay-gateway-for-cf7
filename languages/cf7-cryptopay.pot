@@ -1,0 +1,90 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Contact Form 7 - CryptoPay Gateway\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-19 08:56+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.6.6; wp-6.4.3\n"
+"X-Domain: cf7-cryptopay"
+
+#: app/Gateways/AbstractGateway.php:83
+#, php-format
+msgid "%s is not activated."
+msgstr ""
+
+#: app/Gateways/AbstractGateway.php:222
+#, php-format
+msgid "Activate %s"
+msgstr ""
+
+#: app/Gateways/AbstractGateway.php:209
+msgid "Add cryptocurrency payment gateway to your form."
+msgstr ""
+
+#. Description of the plugin
+msgid "Adds Cryptocurrency payment gateway (CryptoPay) for Contact Form 7."
+msgstr ""
+
+#. Author of the plugin
+msgid "BeycanPress LLC"
+msgstr ""
+
+#: cf7-cryptopay-gateway.php:61 cf7-cryptopay-gateway.php:71
+msgid "clicking here"
+msgstr ""
+
+#. Name of the plugin
+msgid "Contact Form 7 - CryptoPay Gateway"
+msgstr ""
+
+#: cf7-cryptopay-gateway.php:71
+#, php-format
+msgid ""
+"Contact Form 7 - CryptoPay Gateway: This plugin is an extra feature plugin "
+"so it cannot do anything on its own. It needs CryptoPay to work. You can buy "
+"CryptoPay by %s."
+msgstr ""
+
+#: cf7-cryptopay-gateway.php:61
+#, php-format
+msgid ""
+"Contact Form 7 - CryptoPay Gateway: This plugin requires Contact Form 7 to "
+"work. You can download Contact Form 7 by %s."
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://beycanpress.com"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://beycanpress.com/cryptopay/"
+msgstr ""
+
+#: app/Gateways/AbstractGateway.php:87
+msgid "Item price or currency is not set."
+msgstr ""
+
+#: app/Gateways/AbstractGateway.php:314
+msgid "Payment is not verified. Sending mail has been aborted."
+msgstr ""
+
+#: app/Gateways/AbstractGateway.php:147
+msgid ""
+"The final payment for this form has been completed but not submitted. "
+"Therefore, you only need to send the form."
+msgstr ""
+
+#: app/Gateways/AbstractGateway.php:211
+#, php-format
+msgid ""
+"You need add \"%s\" tag to form for start %s and need delete submit button."
+msgstr ""
