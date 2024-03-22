@@ -254,7 +254,7 @@ abstract class AbstractGateway
                         <select name="cf7_cp_item_currency" required>
                             <option value="">Select Currency</option>
                             ' .
-                            wp_kses_post(
+                            wp_kses(
                                 $options,
                                 [
                                     'option' => [
