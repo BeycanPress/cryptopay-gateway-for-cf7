@@ -55,22 +55,10 @@ add_action('plugins_loaded', function (): void {
     cf7CryptoPayRegisterModels();
 
     if (!defined('WPCF7_VERSION')) {
-        add_action('admin_notices', function (): void {
-            ?>
-                <div class="notice notice-error">
-                    <p><?php echo sprintf(esc_html__('Contact Form 7 - CryptoPay Gateway: This plugin requires Contact Form 7 to work. You can download Contact Form 7 by %s.', 'cf7-cryptopay'), '<a href="https://wordpress.org/plugins/contact-form-7/" target="_blank">' . esc_html__('clicking here', 'cf7-cryptopay') . '</a>'); ?></p>
-                </div>
-            <?php
-        });
+        Helpers::requirePluginMessage('Contact Form 7', 'https://wordpress.org/plugins/contact-form-7/');
     } elseif (Helpers::bothExists()) {
         new BeycanPress\CryptoPay\CF7\Loader();
     } else {
-        add_action('admin_notices', function (): void {
-            ?>
-                <div class="notice notice-error">
-                    <p><?php echo sprintf(esc_html__('Contact Form 7 - CryptoPay Gateway: This plugin is an extra feature plugin so it cannot do anything on its own. It needs CryptoPay to work. You can buy CryptoPay by %s.', 'cf7-cryptopay'), '<a href="https://beycanpress.com/product/cryptopay-all-in-one-cryptocurrency-payments-for-wordpress/?utm_source=wp_org_addons&utm_medium=cf7" target="_blank">' . esc_html__('clicking here', 'cf7-cryptopay') . '</a>'); ?></p>
-                </div>
-            <?php
-        });
+        Helpers::requireCryptoPayMessage('Contact Form 7');
     }
 });

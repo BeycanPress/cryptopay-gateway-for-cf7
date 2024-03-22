@@ -144,8 +144,8 @@ abstract class AbstractGateway
     private function alreadyPaid(object $transaction): string
     {
         $this->enqueueScripts();
-        $msg = esc_html__('The final payment for this form has been completed but not submitted. Therefore, you only need to send the form.', 'cf7-cryptopay'); // phpcs:ignore
-        return '<p>' . $msg . '</p><p><input type="hidden" name="transaction-hash" value="' . esc_attr($transaction->getHash()) . '" /><input class="wpcf7-form-control wpcf7-submit has-spinner" type="submit" value="' . esc_attr__('Send') . '"><p>'; // phpcs:ignore
+        $msg = __('The final payment for this form has been completed but not submitted. Therefore, you only need to send the form.', 'cf7-cryptopay'); // phpcs:ignore
+        return '<p>' . esc_html($msg) . '</p><p><input type="hidden" name="transaction-hash" value="' . esc_attr($transaction->getHash()) . '" /><input class="wpcf7-form-control wpcf7-submit has-spinner" type="submit" value="' . esc_attr__('Send') . '"><p>'; // phpcs:ignore
     }
 
         /**
@@ -205,15 +205,15 @@ abstract class AbstractGateway
             $options .= '<option value="' . $code . '" ' . esc_attr($selectedCurrency) . '>' . $name . '</option>';
         }
 
-        echo '<h2>' . $this->name . '</h2>';
+        echo '<h2>' . esc_html($this->name) . '</h2>';
         echo '<p>' . esc_html__('Add cryptocurrency payment gateway to your form.', 'cf7-cryptopay') . '</p>';
         echo '<p>' . sprintf(
             esc_html__(
                 'You need add "%s" tag to form for start %s and need delete submit button.',
                 'cf7-cryptopay'
             ),
-            '<strong>[' . $this->key . ']</strong>',
-            '<strong>[' . $this->name . ']</strong>'
+            '<strong>[' . esc_html($this->key) . ']</strong>',
+            '<strong>[' . esc_html($this->name) . ']</strong>'
         ) . '</p>';
         echo '
             <table>
@@ -253,7 +253,17 @@ abstract class AbstractGateway
                     <td>
                         <select name="cf7_cp_item_currency" required>
                             <option value="">Select Currency</option>
-                            ' . $options . '
+                            ' .
+                            wp_kses_post(
+                                $options,
+                                [
+                                    'option' => [
+                                        'value' => [],
+                                        'selected' => [],
+                                    ],
+                                ]
+                            )
+                            . '
                         </select>
                     </td>
                     <td> [ Required ]</td>
