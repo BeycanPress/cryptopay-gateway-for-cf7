@@ -18,7 +18,7 @@ class Loader
 
         // add transaction page
         Helpers::createTransactionPage(
-            esc_html__('Contact Form 7 Transactions', 'pp-cryptopay'),
+            esc_html__('Contact Form 7 Transactions', 'cf7-cryptopay'),
             'cf7',
             10,
             [],
