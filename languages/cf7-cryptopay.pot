@@ -1,7 +1,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Contact Form 7 - CryptoPay Gateway\n"
+"Project-Id-Version: CryptoPay Gateway for Contact Form 7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-19 08:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -38,26 +38,26 @@ msgstr ""
 msgid "BeycanPress LLC"
 msgstr ""
 
-#: cf7-cryptopay-gateway.php:61 cf7-cryptopay-gateway.php:71
+#: cryptopay-gateway-for-cf7.php:61 cryptopay-gateway-for-cf7.php:71
 msgid "clicking here"
 msgstr ""
 
 #. Name of the plugin
-msgid "Contact Form 7 - CryptoPay Gateway"
+msgid "CryptoPay Gateway for Contact Form 7"
 msgstr ""
 
-#: cf7-cryptopay-gateway.php:71
+#: cryptopay-gateway-for-cf7.php:71
 #, php-format
 msgid ""
-"Contact Form 7 - CryptoPay Gateway: This plugin is an extra feature plugin "
+"CryptoPay Gateway for Contact Form 7: This plugin is an extra feature plugin "
 "so it cannot do anything on its own. It needs CryptoPay to work. You can buy "
 "CryptoPay by %s."
 msgstr ""
 
-#: cf7-cryptopay-gateway.php:61
+#: cryptopay-gateway-for-cf7.php:61
 #, php-format
 msgid ""
-"Contact Form 7 - CryptoPay Gateway: This plugin requires Contact Form 7 to "
+"CryptoPay Gateway for Contact Form 7: This plugin requires Contact Form 7 to "
 "work. You can download Contact Form 7 by %s."
 msgstr ""
 

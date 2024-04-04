@@ -44,8 +44,8 @@ You can easily translate with Loco translate.
 
 == Installation ==
 
-1. Upload the entire `/cf7-cryptopay-gateway` directory to the `/wp-content/plugins/` directory.
-2. Activate Contact Form 7 - CryptoPay Gateway through the 'Plugins' menu in WordPress.
+1. Upload the entire `/cryptopay-gateway-for-cf7` directory to the `/wp-content/plugins/` directory.
+2. Activate CryptoPay Gateway for Contact Form 7 through the 'Plugins' menu in WordPress.
 3. Enjoy.
 
 == Changelog ==
