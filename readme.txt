@@ -9,7 +9,7 @@ Version: 1.0.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Cryptocurrency Payment Gateway Plugin for Contact Form 7, Cryptocurrency payments for WordPress, Bitcoin payments, Crypto payments, USDT, BTC, ETH, SOL
+Cryptocurrency Payment Gateway Plugin for Contact Form 7 Bitcoin payments, Crypto payments, Cryptocurrency Payments, Ethereum, USDT, BTC, ETH, SOL
 
 == Description ==
 

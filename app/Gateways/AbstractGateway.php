@@ -80,6 +80,7 @@ abstract class AbstractGateway
         $itemCurrency = get_post_meta($form->id(), "cf7_cp_item_currency", true);
 
         if (!$activate) {
+            /* translators: %s: plugin name */
             return sprintf(esc_html__('%s is not activated.', 'cf7-cryptopay'), $this->name);
         }
 
@@ -103,7 +104,7 @@ abstract class AbstractGateway
         if (Session::has('cf7_transaction_hash')) {
             $transaction = $this->getModel()->findOneBy([
                 'hash' => Session::get('cf7_transaction_hash'),
-                'params' => json_encode($params),
+                'params' => wp_json_encode($params),
             ]);
             if ($transaction) {
                 return $this->alreadyPaid($transaction);
@@ -154,6 +155,10 @@ abstract class AbstractGateway
      */
     public function save(\WPCF7_ContactForm $form): void
     {
+        if (!isset($_POST['cf7_cp_nonce']) || !wp_verify_nonce($_POST['cf7_cp_nonce'], 'cf7_cp_nonce')) {
+            return;
+        }
+
         $activate = isset($_POST['cf7_cp_activate']) ? 1 : 0;
         $itemId = isset($_POST['cf7_cp_item_id']) ? absint($_POST['cf7_cp_item_id']) : 0;
         $itemPrice = isset($_POST['cf7_cp_item_price']) ? absint($_POST['cf7_cp_item_price']) : 0;
@@ -186,6 +191,8 @@ abstract class AbstractGateway
      */
     public function panelContent(): void
     {
+        /* phpcs:disable WordPress.Security.NonceVerification.Recommended */
+
         if (class_exists(Constants::class)) {
             $currencies = Constants::getCountryCurrencies();
         } else {
@@ -205,11 +212,14 @@ abstract class AbstractGateway
             $options .= '<option value="' . $code . '" ' . esc_attr($selectedCurrency) . '>' . $name . '</option>';
         }
 
+        wp_nonce_field('cf7_cp_nonce', 'cf7_cp_nonce', false, true);
+
         echo '<h2>' . esc_html($this->name) . '</h2>';
         echo '<p>' . esc_html__('Add cryptocurrency payment gateway to your form.', 'cf7-cryptopay') . '</p>';
         echo '<p>' . sprintf(
+            /* translators: %s: tag name */
             esc_html__(
-                'You need add "%s" tag to form for start %s and need delete submit button.',
+                'You need add "%1$s" tag to form for start %2$s and need delete submit button.',
                 'cf7-cryptopay'
             ),
             '<strong>[' . esc_html($this->key) . ']</strong>',
@@ -219,7 +229,13 @@ abstract class AbstractGateway
             <table>
                 <tr>
                     <td width="195px">
-                        <label>' . sprintf(esc_html__('Activate %s', 'cf7-cryptopay'), $this->name) . ': </label>
+                        <label>'
+                        . sprintf(
+                            /* translators: %s: plugin name */
+                            esc_html__('Activate %s', 'cf7-cryptopay'),
+                            esc_html($this->name)
+                        )
+                        . ': </label>
                     </td>
                     <td width="250px">
                         <input name="cf7_cp_activate" value="1" type="checkbox" ' . esc_attr($activationStatus) . '>
@@ -270,6 +286,8 @@ abstract class AbstractGateway
                 </tr>
             </table>
         ';
+
+        /* phpcs:enable WordPress.Security.NonceVerification.Recommended */
     }
 
     /**
