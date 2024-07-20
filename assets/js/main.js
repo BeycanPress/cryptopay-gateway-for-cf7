@@ -8,7 +8,7 @@
         const submit = `<input class="wpcf7-form-control wpcf7-submit has-spinner" type="submit" value="${__('Send')}"><span class="wpcf7-spinner"></span>`
 
         const transactionInput = (transaction) => {
-            return `<input type="hidden" name="transaction-hash" value="${transaction.hash}" />`
+            return `<input type="hidden" name="transaction-hash" value="${transaction.id}" />`
         }
 
         wpcf7.addEventListener('wpcf7mailsent', async function (e) {

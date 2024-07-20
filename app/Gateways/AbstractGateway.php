@@ -25,6 +25,7 @@ abstract class AbstractGateway
      */
     public function __construct()
     {
+        Session::start();
         add_action('wpcf7_init', [$this, 'init']);
         add_action('wpcf7_after_save', [$this, 'save']);
         add_filter('wpcf7_editor_panels', [$this, 'addPanel']);
