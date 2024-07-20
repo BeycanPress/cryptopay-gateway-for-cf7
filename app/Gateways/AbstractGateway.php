@@ -223,7 +223,7 @@ abstract class AbstractGateway
                 'cf7-cryptopay'
             ),
             '<strong>[' . esc_html($this->key) . ']</strong>',
-            '<strong>[' . esc_html($this->name) . ']</strong>'
+            '<strong>' . esc_html($this->name) . '</strong>'
         ) . '</p>';
         echo '
             <table>
