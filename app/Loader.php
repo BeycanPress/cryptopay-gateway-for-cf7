@@ -25,6 +25,7 @@ class Loader
             ['orderId']
         );
 
+        Hook::addFilter('edit_config_data_cf7', [$this, 'disableReminderEmail']);
         Hook::addFilter('payment_redirect_urls_cf7', [$this, 'paymentRedirectUrls']);
 
         if (Helpers::exists()) {
@@ -32,6 +33,15 @@ class Loader
         } elseif (Helpers::liteExists()) {
             new Gateways\GatewayLite();
         }
+    }
+
+    /**
+     * @param object $data
+     * @return object
+     */
+    public function disableReminderEmail(object $data): object
+    {
+        return $data->disableReminderEmail();
     }
 
     /**
