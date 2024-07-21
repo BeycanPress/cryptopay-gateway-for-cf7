@@ -17,11 +17,10 @@
             window.location.reload()
         }, false);
 
-        const event = async ({transaction}) => {
-            helpers.closePopup();
-            await helpers.sleep(100);
+        const event = async (ctx) => {
+            ctx.disablePopup = true;
             $('.overlay').remove();
-            form.append(transactionInput(transaction))
+            form.append(transactionInput(ctx.transaction))
             $('#cryptopay, #cryptopay-lite').after(submit)
             $('#cryptopay, #cryptopay-lite').remove();
             form.find('input[type="submit"]').click()
