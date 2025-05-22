@@ -82,11 +82,11 @@ abstract class AbstractGateway
 
         if (!$activate) {
             /* translators: %s: plugin name */
-            return sprintf(esc_html__('%s is not activated.', 'cf7-cryptopay'), $this->name);
+            return sprintf(esc_html__('%s is not activated.', 'cryptopay-gateway-for-cf7'), $this->name);
         }
 
         if (!$itemPrice || !$itemCurrency) {
-            return esc_html__('Item price or currency is not set.', 'cf7-cryptopay');
+            return esc_html__('Item price or currency is not set.', 'cryptopay-gateway-for-cf7');
         }
 
         $order = [
@@ -113,9 +113,9 @@ abstract class AbstractGateway
         }
 
         $html = $this->getPayment()
-        ->setOrder($this->createOrder($order))
-        ->setParams($this->createParams($params))
-        ->html(loading:true);
+            ->setOrder($this->createOrder($order))
+            ->setParams($this->createParams($params))
+            ->html(loading: true);
 
         $this->enqueueScripts([
             $this->getMainJsKey()
@@ -132,9 +132,9 @@ abstract class AbstractGateway
     {
         wp_enqueue_script(
             'cf7-' . $this->key,
-            CF7_CRYPTOPAY_URL . 'assets/js/main.js',
+            CRYPTOPAY_GATEWAY_FOR_CF7_URL . 'assets/js/main.js',
             array_merge($deps, ['jquery', 'wp-i18n']),
-            CF7_CRYPTOPAY_VERSION,
+            CRYPTOPAY_GATEWAY_FOR_CF7_VERSION,
             true
         );
     }
@@ -146,17 +146,18 @@ abstract class AbstractGateway
     private function alreadyPaid(object $transaction): string
     {
         $this->enqueueScripts();
-        $msg = __('The final payment for this form has been completed but not submitted. Therefore, you only need to send the form.', 'cf7-cryptopay'); // phpcs:ignore
+        $msg = __('The final payment for this form has been completed but not submitted. Therefore, you only need to send the form.', 'cryptopay-gateway-for-cf7'); // phpcs:ignore
         return '<p>' . esc_html($msg) . '</p><p><input type="hidden" name="transaction-hash" value="' . esc_attr($transaction->getHash()) . '" /><input class="wpcf7-form-control wpcf7-submit has-spinner" type="submit" value="' . esc_attr__('Send') . '"><p>'; // phpcs:ignore
     }
 
-        /**
+    /**
      * @param \WPCF7_ContactForm $form
      * @return void
      */
     public function save(\WPCF7_ContactForm $form): void
     {
-        if (!isset($_POST['cf7_cp_nonce']) || !wp_verify_nonce($_POST['cf7_cp_nonce'], 'cf7_cp_nonce')) {
+        $nonce = isset($_POST['cf7_cp_nonce']) ? sanitize_text_field(wp_unslash($_POST['cf7_cp_nonce'])) : '';
+        if (!wp_verify_nonce($nonce, 'cf7_cp_nonce')) {
             return;
         }
 
@@ -164,8 +165,8 @@ abstract class AbstractGateway
         $itemId = isset($_POST['cf7_cp_item_id']) ? absint($_POST['cf7_cp_item_id']) : 0;
         $itemPrice = isset($_POST['cf7_cp_item_price']) ? absint($_POST['cf7_cp_item_price']) : 0;
         $itemCurrency = isset($_POST['cf7_cp_item_currency'])
-        ? sanitize_text_field($_POST['cf7_cp_item_currency'])
-        : 'USD';
+            ? sanitize_text_field(wp_unslash($_POST['cf7_cp_item_currency']))
+            : 'USD';
 
         update_post_meta($form->id(), "cf7_cp_activate", $activate);
         update_post_meta($form->id(), "cf7_cp_item_id", $itemId);
@@ -192,6 +193,7 @@ abstract class AbstractGateway
      */
     public function panelContent(): void
     {
+        // here is fe side and adding nonce field below
         /* phpcs:disable WordPress.Security.NonceVerification.Recommended */
 
         if (class_exists(Constants::class)) {
@@ -216,12 +218,15 @@ abstract class AbstractGateway
         wp_nonce_field('cf7_cp_nonce', 'cf7_cp_nonce', false, true);
 
         echo '<h2>' . esc_html($this->name) . '</h2>';
-        echo '<p>' . esc_html__('Add cryptocurrency payment gateway to your form.', 'cf7-cryptopay') . '</p>';
+        echo '<p>' . esc_html__(
+            'Add cryptocurrency payment gateway to your form.',
+            'cryptopay-gateway-for-cf7'
+        ) . '</p>';
         echo '<p>' . sprintf(
             /* translators: %s: tag name */
             esc_html__(
                 'You need add "%1$s" tag to form for start %2$s and need delete submit button.',
-                'cf7-cryptopay'
+                'cryptopay-gateway-for-cf7'
             ),
             '<strong>[' . esc_html($this->key) . ']</strong>',
             '<strong>' . esc_html($this->name) . '</strong>'
@@ -231,12 +236,12 @@ abstract class AbstractGateway
                 <tr>
                     <td width="195px">
                         <label>'
-                        . sprintf(
-                            /* translators: %s: plugin name */
-                            esc_html__('Activate %s', 'cf7-cryptopay'),
-                            esc_html($this->name)
-                        )
-                        . ': </label>
+            . sprintf(
+                /* translators: %s: plugin name */
+                esc_html__('Activate %s', 'cryptopay-gateway-for-cf7'),
+                esc_html($this->name)
+            )
+            . ': </label>
                     </td>
                     <td width="250px">
                         <input name="cf7_cp_activate" value="1" type="checkbox" ' . esc_attr($activationStatus) . '>
@@ -271,16 +276,16 @@ abstract class AbstractGateway
                         <select name="cf7_cp_item_currency" required>
                             <option value="">Select Currency</option>
                             ' .
-                            wp_kses(
-                                $options,
-                                [
-                                    'option' => [
-                                        'value' => [],
-                                        'selected' => [],
-                                    ],
-                                ]
-                            )
-                            . '
+            wp_kses(
+                $options,
+                [
+                    'option' => [
+                        'value' => [],
+                        'selected' => [],
+                    ],
+                ]
+            )
+            . '
                         </select>
                     </td>
                     <td> [ Required ]</td>
@@ -298,8 +303,8 @@ abstract class AbstractGateway
     public function addSessionForPayment(array $postedData): array
     {
         $transactionHash = isset($postedData['transaction-hash'])
-        ? sanitize_text_field($postedData['transaction-hash'])
-        : null;
+            ? sanitize_text_field($postedData['transaction-hash'])
+            : null;
 
         if ($transactionHash) {
             Session::set('cf7_transaction_hash', $transactionHash);
@@ -325,8 +330,8 @@ abstract class AbstractGateway
 
         $postedData = $submission->get_posted_data();
         $transactionHash = isset($postedData['transaction-hash'])
-        ? sanitize_text_field($postedData['transaction-hash'])
-        : null;
+            ? sanitize_text_field($postedData['transaction-hash'])
+            : null;
 
         if ($transactionHash) {
             $transaction = $this->getModel()->findOneBy([
@@ -340,7 +345,7 @@ abstract class AbstractGateway
 
         if ($abort) {
             $submission->set_response($form->filter_message(
-                esc_html__('Payment is not verified. Sending mail has been aborted.', 'cf7-cryptopay')
+                esc_html__('Payment is not verified. Sending mail has been aborted.', 'cryptopay-gateway-for-cf7')
             ));
         }
     }

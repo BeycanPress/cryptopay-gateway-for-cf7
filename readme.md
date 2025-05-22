@@ -1,20 +1,25 @@
 ## Cryptocurrency Payment Gateway for Contact Form 7 by CryptoPay
 
-First of all, we would like to point out that this plugin is not a standalone plugin. This plugin is a **<a href="https://beycanpress.com/cryptopay/?utm_source=github&utm_medium=cryptopay_cf7">cryptocurrency payment gateway for Contact Form 7</a>**. In other words, users who want to sell courses with cryptocurrency payments can use WordPress and Contact Form 7. However, this plugin is a plugin for CryptoPay and a cryptocurrency payment gateway for Contact Form 7. So it's actually CryptoPay, which is the main plugin that handles cryptocurrency payments for WordPress. Therefore, users must have both plugins.
+### What does this plugin do?
 
-Thanks to this plugin, you can receive **<a href="https://beycanpress.com/cryptopay/?utm_source=github&utm_medium=cryptopay_cf7">cryptocurrency payments</a>** from many Blockchain networks, especially Bitcoin, Ethereum, Solana, and sell paid courses with cryptocurrencies on your WordPress site with the Contact Form 7 plugin.
+As blockchain and digital currencies become more mainstream, many businesses and creators are looking for ways to accept crypto payments. If you're using Contact Form 7 on your WordPress website and want to accept cryptocurrency payments without relying on third-party processors, this plugin is made for you.
 
-What is CryptoPay? (Click and watch video)
+This add-on allows you to easily embed a decentralized, fee-free crypto payment system into your Contact Form 7 forms using CryptoPay.
 
-[![Cryptocurrency payment gateway for WordPress](https://img.youtube.com/vi/3vaoFL4XG10/0.jpg)](https://www.youtube.com/watch?v=3vaoFL4XG10)
-<br>
+### How does it work?
 
-Review CryptoPay Lite: **<a href="https://wordpress.org/plugins/cryptopay-wc-lite/">Cryptocurrency payment gateway for Contact Form 7</a>**
+This plugin is an extension of the CryptoPay platform, so you’ll need to have either the free (Lite) or premium version of CryptoPay installed and active on your WordPress site. You’ll also need Contact Form 7 to be installed and activated.
 
-Review CryptoPay Premium: **<a href="https://beycanpress.com/cryptopay/?utm_source=github&utm_medium=cryptopay_cf7">Cryptocurrency payments for WooCommerce</a>**
+Once everything is set up, you can enable CryptoPay as a payment option in your form configuration. From there, users can make crypto payments directly through your Contact Form 7 forms—simply and securely.
 
-Review Contact Form 7: **<a href="https://wordpress.org/plugins/contact-form-7/">Contact Form 7</a>**
+### Usage
 
-See **<a href="https://cryptopay.beycanpress.net/" target="_blank">Demo</a>**
+* First, enable the CryptoPay from the tab.
+![Screenshot-1](./.wordpress-org/screenshot-1.png)
 
-Bitcoin, Ethereum, Binance, Solana, Tron, Avalanche, Polygon, MetaMask, TrustWallet, WalletConnect, Phantom Cryptocurrency payments gateway plugin for WordPress & WooCommerce, cryptocurrency wordpress, cryptocurrency woocommerce, cryptocurrency payments, cryptocurrency payments gateway, cryptocurrency payments for woocommerce, cryptocurrency payments for wordpress, bitcoin payment for wordpress, woocommerce crypto payments, wordpress crypto payments, wordPress cryptocurrency payment plugin, woocommerce cryptocurrency payment gateway, cryptocurrency payment gateway for woocommerce, crypto payments woocommerce, accept cryptocurrency payments
+* Add the CryptoPay short code to your form.
+![Screenshot-1](./.wordpress-org/screenshot-2.png)
+
+* Everything is ready, now you can test the form.
+![Screenshot-1](./.wordpress-org/screenshot-3.png)
+![Screenshot-1](./.wordpress-org/screenshot-4.png)

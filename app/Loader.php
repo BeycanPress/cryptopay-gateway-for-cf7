@@ -16,14 +16,16 @@ class Loader
     {
         Helpers::registerIntegration('cf7');
 
-        // add transaction page
-        Helpers::createTransactionPage(
-            esc_html__('Contact Form 7 Transactions', 'cf7-cryptopay'),
-            'cf7',
-            10,
-            [],
-            ['orderId']
-        );
+        add_action('init', function (): void {
+            // add transaction page
+            Helpers::createTransactionPage(
+                esc_html__('Contact Form 7 Transactions', 'cryptopay-gateway-for-cf7'),
+                'cf7',
+                9,
+                [],
+                ['orderId']
+            );
+        }, 9);
 
         Hook::addFilter('edit_config_data_cf7', [$this, 'disableReminderEmail']);
         Hook::addFilter('payment_redirect_urls_cf7', [$this, 'paymentRedirectUrls']);

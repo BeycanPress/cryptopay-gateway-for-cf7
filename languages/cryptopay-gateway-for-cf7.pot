@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CryptoPay Gateway for Contact Form 7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-19 08:56+0000\n"
+"POT-Creation-Date: 2025-05-22 02:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -13,20 +13,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.6.6; wp-6.4.3\n"
-"X-Domain: cf7-cryptopay"
+"X-Loco-Version: 2.8.0; wp-6.7.2; php-8.2.25\n"
+"X-Domain: cryptopay-gateway-for-cf7"
 
-#: app/Gateways/AbstractGateway.php:83
+#. %s: plugin name
+#: app/Gateways/AbstractGateway.php:85
 #, php-format
 msgid "%s is not activated."
 msgstr ""
 
-#: app/Gateways/AbstractGateway.php:222
+#. %s: plugin name
+#: app/Gateways/AbstractGateway.php:239
 #, php-format
 msgid "Activate %s"
 msgstr ""
 
-#: app/Gateways/AbstractGateway.php:209
+#: app/Gateways/AbstractGateway.php:219
 msgid "Add cryptocurrency payment gateway to your form."
 msgstr ""
 
@@ -38,27 +40,12 @@ msgstr ""
 msgid "BeycanPress LLC"
 msgstr ""
 
-#: cryptopay-gateway-for-cf7.php:61 cryptopay-gateway-for-cf7.php:71
-msgid "clicking here"
+#: app/Loader.php:21
+msgid "Contact Form 7 Transactions"
 msgstr ""
 
 #. Name of the plugin
 msgid "CryptoPay Gateway for Contact Form 7"
-msgstr ""
-
-#: cryptopay-gateway-for-cf7.php:71
-#, php-format
-msgid ""
-"CryptoPay Gateway for Contact Form 7: This plugin is an extra feature plugin "
-"so it cannot do anything on its own. It needs CryptoPay to work. You can buy "
-"CryptoPay by %s."
-msgstr ""
-
-#: cryptopay-gateway-for-cf7.php:61
-#, php-format
-msgid ""
-"CryptoPay Gateway for Contact Form 7: This plugin requires Contact Form 7 to "
-"work. You can download Contact Form 7 by %s."
 msgstr ""
 
 #. Author URI of the plugin
@@ -69,22 +56,24 @@ msgstr ""
 msgid "https://beycanpress.com/cryptopay/"
 msgstr ""
 
-#: app/Gateways/AbstractGateway.php:87
+#: app/Gateways/AbstractGateway.php:89
 msgid "Item price or currency is not set."
 msgstr ""
 
-#: app/Gateways/AbstractGateway.php:314
+#: app/Gateways/AbstractGateway.php:346
 msgid "Payment is not verified. Sending mail has been aborted."
 msgstr ""
 
-#: app/Gateways/AbstractGateway.php:147
+#: app/Gateways/AbstractGateway.php:149
 msgid ""
 "The final payment for this form has been completed but not submitted. "
 "Therefore, you only need to send the form."
 msgstr ""
 
-#: app/Gateways/AbstractGateway.php:211
+#. %s: tag name
+#: app/Gateways/AbstractGateway.php:225
 #, php-format
 msgid ""
-"You need add \"%s\" tag to form for start %s and need delete submit button."
+"You need add \"%1$s\" tag to form for start %2$s and need delete submit "
+"button."
 msgstr ""
