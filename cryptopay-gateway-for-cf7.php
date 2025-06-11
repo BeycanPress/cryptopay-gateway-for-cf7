@@ -17,6 +17,7 @@ defined('ABSPATH') || exit;
  * Author:      BeycanPress LLC
  * Author URI:  https://beycanpress.com
  * License:     GPLv3
+ * Requires Plugins: contact-form-7
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain: cryptopay-gateway-for-cf7
  * Domain Path: /languages

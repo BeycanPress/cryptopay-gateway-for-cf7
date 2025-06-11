@@ -147,7 +147,7 @@ abstract class AbstractGateway
     {
         $this->enqueueScripts();
         $msg = __('The final payment for this form has been completed but not submitted. Therefore, you only need to send the form.', 'cryptopay-gateway-for-cf7'); // phpcs:ignore
-        return '<p>' . esc_html($msg) . '</p><p><input type="hidden" name="transaction-hash" value="' . esc_attr($transaction->getHash()) . '" /><input class="wpcf7-form-control wpcf7-submit has-spinner" type="submit" value="' . esc_attr__('Send') . '"><p>'; // phpcs:ignore
+        return '<p>' . esc_html($msg) . '</p><p><input type="hidden" name="transaction-hash" value="' . esc_attr($transaction->getHash()) . '" /><input class="wpcf7-form-control wpcf7-submit has-spinner" type="submit" value="' . esc_attr__('Send', 'cryptopay-gateway-for-cf7') . '"><p>'; // phpcs:ignore
     }
 
     /**

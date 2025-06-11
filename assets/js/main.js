@@ -5,7 +5,7 @@
         const wpcf7 = document.querySelector('.wpcf7');
         const helpers = window.cpHelpers || window.cplHelpers
 
-        const submit = `<input class="wpcf7-form-control wpcf7-submit has-spinner" type="submit" value="${__('Send')}"><span class="wpcf7-spinner"></span>`
+        const submit = `<input class="wpcf7-form-control wpcf7-submit has-spinner" type="submit" value="${__('Send', 'cryptopay-gateway-for-cf7')}"><span class="wpcf7-spinner"></span>`
 
         const transactionInput = (transaction) => {
             return `<input type="hidden" name="transaction-hash" value="${transaction.id}" />`
@@ -24,7 +24,7 @@
             $('#cryptopay, #cryptopay-lite').after(submit)
             $('#cryptopay, #cryptopay-lite').remove();
             form.find('input[type="submit"]').click()
-            helpers.successPopup(__('Payment completed successfully!'))
+            helpers.successPopup(__('Payment completed successfully!', 'cryptopay-gateway-for-cf7'))
         }
 
         if (window.CryptoPayApp) {

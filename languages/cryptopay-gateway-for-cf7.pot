@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CryptoPay Gateway for Contact Form 7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-22 02:27+0000\n"
+"POT-Creation-Date: 2025-05-30 05:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.8.0; wp-6.7.2; php-8.2.25\n"
+"X-Loco-Version: 2.8.0; wp-6.8.1; php-8.2.25\n"
 "X-Domain: cryptopay-gateway-for-cf7"
 
 #. %s: plugin name
@@ -23,12 +23,12 @@ msgid "%s is not activated."
 msgstr ""
 
 #. %s: plugin name
-#: app/Gateways/AbstractGateway.php:239
+#: app/Gateways/AbstractGateway.php:241
 #, php-format
 msgid "Activate %s"
 msgstr ""
 
-#: app/Gateways/AbstractGateway.php:219
+#: app/Gateways/AbstractGateway.php:221
 msgid "Add cryptocurrency payment gateway to your form."
 msgstr ""
 
@@ -40,7 +40,7 @@ msgstr ""
 msgid "BeycanPress LLC"
 msgstr ""
 
-#: app/Loader.php:21
+#: app/Loader.php:22
 msgid "Contact Form 7 Transactions"
 msgstr ""
 
@@ -60,8 +60,12 @@ msgstr ""
 msgid "Item price or currency is not set."
 msgstr ""
 
-#: app/Gateways/AbstractGateway.php:346
+#: app/Gateways/AbstractGateway.php:348
 msgid "Payment is not verified. Sending mail has been aborted."
+msgstr ""
+
+#: app/Gateways/AbstractGateway.php:150
+msgid "Send"
 msgstr ""
 
 #: app/Gateways/AbstractGateway.php:149
@@ -71,7 +75,7 @@ msgid ""
 msgstr ""
 
 #. %s: tag name
-#: app/Gateways/AbstractGateway.php:225
+#: app/Gateways/AbstractGateway.php:227
 #, php-format
 msgid ""
 "You need add \"%1$s\" tag to form for start %2$s and need delete submit "
